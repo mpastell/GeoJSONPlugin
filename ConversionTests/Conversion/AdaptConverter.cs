@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AgGateway.ADAPT.ApplicationDataModel.Prescriptions;
 
 namespace ConversionTests.Conversion
 {
@@ -136,6 +137,41 @@ namespace ConversionTests.Conversion
 			}
 			TimeSpan conversionTime = DateTime.Now.Subtract(startTime);
 			Console.WriteLine($"Completed ADAPT import in {conversionTime}, imported {adms.Count} ApplicationDataModels");
+
+			var adm = adms[0];
+
+
+			var pres = (RasterGridPrescription)adm.Catalog.Prescriptions.First();
+			
+			var of = File.CreateText("raster0.txt");
+			var of1 = File.CreateText("raster1.txt");
+			int j = 1;
+			foreach(var rate in pres.Rates)
+			{
+				of.Write(rate.RxRates[0].Rate.ToString());
+				of1.Write(rate.RxRates[1].Rate.ToString());
+				if (j == pres.ColumnCount)
+				{
+					of.Write("\n");
+					of1.Write("\n");
+					j = 1;
+				}
+				else
+				{
+					of.Write("\t");
+					of1.Write("\t");
+					j++;
+				}
+				//Console.WriteLine(rate.RxRates[0].Rate.ToString() + "," + rate.RxRates[1].Rate.ToString());
+			}
+			
+			of.Close();
+			of1.Close();
+
+
+			//var data = adm.Documents.LoggedData.First();
+			//string jsonString = System.Text.Json.JsonSerializer.Serialize(adm);
+			//File.WriteAllText("ADM.json", jsonString);
 
 			// Export
 			Console.WriteLine("Starting ADAPT export");

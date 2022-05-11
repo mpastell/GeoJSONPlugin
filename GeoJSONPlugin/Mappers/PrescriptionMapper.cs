@@ -322,7 +322,8 @@ namespace GeoJSONPlugin.Mappers
 					{
 						properties.Add("productId", prescription.Rates[index].RxRates[0].RxProductLookupId);
 					}
-					properties.Add("rate", prescription.Rates[index].RxRates[0].Rate);
+					properties.Add("rate0", prescription.Rates[index].RxRates[0].Rate);
+					properties.Add("rate1", prescription.Rates[index].RxRates[1].Rate);
 
 					features.Add(new Feature(geometry, properties));
 				}

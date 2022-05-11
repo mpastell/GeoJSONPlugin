@@ -6,8 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AgGatewayADAPTFramework" Version="2.0.4" />
-    <PackageReference Include="AgGatewayISOPlugin" Version="3.2.0" />
+    <PackageReference Include="AgGatewayADAPTFramework" Version="2.8.1" />
+    <PackageReference Include="AgGatewayADMPlugin" Version="2.3.3" />
+    <PackageReference Include="AgGatewayISOPlugin" Version="4.2.0" />
   </ItemGroup>
 
   <ItemGroup>
