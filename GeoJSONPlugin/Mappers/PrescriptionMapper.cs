@@ -301,32 +301,35 @@ namespace GeoJSONPlugin.Mappers
 			foreach (var bbox in grid)
 			{
 				// skip outOfField grids
-				if (prescription.Rates[index].RxRates[0].Rate != outOfFieldRate)
-                {
+				//if (prescription.Rates[index].RxRates[0].Rate != outOfFieldRate)
+                //{
 					GeoJSON.Net.Geometry.IGeometryObject geometry = PolygonMapper.MapBoundingBox(bbox, _properties.AffineTransformation);
 					Dictionary<string, object> properties = new Dictionary<string, object>();
 					RxProductLookup product = prescription.RxProductLookups.Where(r => r.Id.ReferenceId == prescription.Rates[index].RxRates[0].RxProductLookupId).FirstOrDefault();
-					if (product != null)
-					{
-						properties.Add("productId", product.ProductId);
-						Product adaptProduct = _dataModel.Catalog.Products.Where(p => p.Id.ReferenceId == product.ProductId).FirstOrDefault();
-						if (adaptProduct != null)
-						{
-							properties.Add("productDescription", adaptProduct.Description);
-							properties.Add("productType", adaptProduct.ProductType.ToString());	// or via GetName?
-						}
-						properties.Add("productCode", product.Representation.Code);
-						properties.Add("productUom", product.UnitOfMeasure.Code);
-					}
-					else
-					{
-						properties.Add("productId", prescription.Rates[index].RxRates[0].RxProductLookupId);
-					}
-					properties.Add("rate0", prescription.Rates[index].RxRates[0].Rate);
-					properties.Add("rate1", prescription.Rates[index].RxRates[1].Rate);
-
-					features.Add(new Feature(geometry, properties));
+				//if (product != null)
+				//{
+				//	properties.Add("productId", product.ProductId);
+				//	Product adaptProduct = _dataModel.Catalog.Products.Where(p => p.Id.ReferenceId == product.ProductId).FirstOrDefault();
+				//	if (adaptProduct != null)
+				//	{
+				//		properties.Add("productDescription", adaptProduct.Description);
+				//		properties.Add("productType", adaptProduct.ProductType.ToString());	// or via GetName?
+				//	}
+				//	properties.Add("productCode", product.Representation.Code);
+				//	properties.Add("productUom", product.UnitOfMeasure.Code);
+				//}
+				//else
+				//{
+				//	properties.Add("productId", prescription.Rates[index].RxRates[0].RxProductLookupId);
+				//}
+				
+				for (int ri = 0; ri < prescription.Rates[index].RxRates.Count; ri++)
+				{
+					properties.Add("rate" + ri.ToString(), prescription.Rates[index].RxRates[ri].Rate);
 				}
+					
+				features.Add(new Feature(geometry, properties));
+				//}
 				index++;
 			}
 

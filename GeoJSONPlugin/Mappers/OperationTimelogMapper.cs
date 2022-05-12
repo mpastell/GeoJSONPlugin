@@ -36,13 +36,15 @@ namespace GeoJSONPlugin.Mappers
 
 			if (operationData.GetDeviceElementUses != null)
 			{
-				int maximumDepth = 0;	// @ToDo ILaR: operationData.MaxDepth;
+				int maximumDepth = 2;	// @ToDo ILaR: operationData.MaxDepth;
 				
 				if (_properties.MaximumMappingDepth != null)
 				{
 					if (_properties.MaximumMappingDepth >= -1 || _properties.MaximumMappingDepth <= operationData.MaxDepth)
 						maximumDepth = (int)_properties.MaximumMappingDepth;
 				}
+
+				maximumDepth = operationData.MaxDepth;
 
 				for (var i = 0; i <= maximumDepth; i++)
 				{
@@ -52,6 +54,7 @@ namespace GeoJSONPlugin.Mappers
 				}
 			}
 
+
 			return deviceElementUses;
 		}
 
@@ -59,6 +62,9 @@ namespace GeoJSONPlugin.Mappers
 		{
 			List<DeviceElementUse> deviceElementUses = GetAllSections(operation);
 			List<WorkingData> workingDatas = deviceElementUses.SelectMany(x => x.GetWorkingDatas()).ToList();   // meters
+
+			//Filter out duplicates
+			workingDatas = workingDatas.GroupBy(x => x.Representation.Code).Select(x => x.First()).ToList();
 
 			// Display representaitons for debug
 			Console.WriteLine($"Contains the following representations: ");
@@ -142,12 +148,13 @@ namespace GeoJSONPlugin.Mappers
 
 						if (value != null && key != null)
 						{
-							properties.Add(key, value);
 
-							if (uom != null)
-							{
-								properties.Add(key + "_Uom", uom);
-							}							
+							properties.Add(key, value);
+							//Console.WriteLine(key);
+							//if (uom != null)
+							//{
+							//	properties.Add(key + "_Uom", uom);
+							//}							
 						}
 					}
 					// add to FC

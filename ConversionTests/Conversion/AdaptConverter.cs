@@ -169,7 +169,29 @@ namespace ConversionTests.Conversion
 			of1.Close();
 
 
-			//var data = adm.Documents.LoggedData.First();
+			// Inspect logged data
+			var data = adm.Documents.LoggedData.First();
+			
+			foreach (var opdata in data.OperationData) {
+				Console.WriteLine(opdata.OperationType);
+				var el = opdata.GetDeviceElementUses(opdata.MaxDepth);
+				if (el.Count() > 0)
+				{
+					Console.WriteLine(el.Count());
+
+					foreach (var e in el)
+					{
+						Console.WriteLine("el: " + e.OperationDataId);
+						var wds = e.GetWorkingDatas();
+						foreach (var wd in wds)
+						{
+							Console.WriteLine("\t" + wd.Representation.Code + ": " + wd.Representation.Description);
+						}
+					}
+				}
+			}
+
+			
 			//string jsonString = System.Text.Json.JsonSerializer.Serialize(adm);
 			//File.WriteAllText("ADM.json", jsonString);
 
